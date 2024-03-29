@@ -1,11 +1,11 @@
 // A mock function to mimic making an async request for data
-export function fetchAllProducts() {
-  return new Promise(async (resolve) => {
-    const response = await fetch("http://localhost:8080/products");
-    const data = await response.json();
-    resolve({ data });
-  });
-}
+// export function fetchAllProducts() {
+//   return new Promise(async (resolve) => {
+//     const response = await fetch("http://localhost:8080/products");
+//     const data = await response.json();
+//     resolve({ data });
+//   });
+// }
 
 
 export function fetchProductsByFilters(filter,sort,pagination) {
@@ -36,6 +36,24 @@ export function fetchProductsByFilters(filter,sort,pagination) {
     console.log(data,"product-listapi response")
     const totalItems = data.items
     resolve({data:{products:data.data,totalItems:+totalItems}})
+  }
+  );
+}
+
+export function fetchCategories() {
+  return new Promise(async (resolve) =>{
+    const response = await fetch('http://localhost:8080/categories') 
+    const data = await response.json()
+    resolve({data})
+  }
+  );
+}
+
+export function fetchBrands() {
+  return new Promise(async (resolve) =>{
+    const response = await fetch('http://localhost:8080/brands') 
+    const data = await response.json()
+    resolve({data})
   }
   );
 }
