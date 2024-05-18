@@ -5,12 +5,7 @@ import ProductList from "./features/product-list/components/ProductList";
 import Home from "./features/pages/Home";
 import Login from "./features/auth/components/Login";
 import SignUp from "./features/auth/components/Signup";
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Route,
-  Link,
-} from "react-router-dom";
+import { createBrowserRouter, Link, RouterProvider } from 'react-router-dom';
 import Cart from "./features/cart/cart";
 import CartPage from "./features/pages/CartPage";
 import CheckOutPage from "./features/pages/CheckOutPage";
@@ -30,6 +25,10 @@ import UserProfilePage from "./features/pages/UserProfilePage";
 import { fetchLoggedInUserAsync } from "./features/user/UserSlice";
 import Logout from './features/auth/components/Logout';
 import ForgotPasswordPage from './features/pages/ForgotPasswordPage';
+import ProtectedAdmin from './features/auth/components/ProtectedAdmin';
+import AdminHome from './features/pages/AdminHome.jsx';
+import AdminProductDetailPage from './features/pages/AdminProductDetailPage';
+import AdminProductFormPage from './features/pages/AdminProductFormPage';
 
 const router = createBrowserRouter([
   {
@@ -38,6 +37,14 @@ const router = createBrowserRouter([
       <Protected>
         <Home />
       </Protected>
+    ),
+  },
+  {
+    path: '/admin',
+    element: (
+      <ProtectedAdmin>
+        <AdminHome></AdminHome>
+      </ProtectedAdmin>
     ),
   },
   {
@@ -70,6 +77,30 @@ const router = createBrowserRouter([
       <Protected>
         <ProductDetailPage></ProductDetailPage>
       </Protected>
+    ),
+  },
+  {
+    path: '/admin/product-detail/:id',
+    element: (
+      <ProtectedAdmin>
+        <AdminProductDetailPage></AdminProductDetailPage>
+      </ProtectedAdmin>
+    ),
+  },
+  {
+    path: '/admin/product-form',
+    element: (
+      <ProtectedAdmin>
+        <AdminProductFormPage></AdminProductFormPage>
+      </ProtectedAdmin>
+    ),
+  },
+  {
+    path: '/admin/product-form/edit/:id',
+    element: (
+      <ProtectedAdmin>
+        <AdminProductFormPage></AdminProductFormPage>
+      </ProtectedAdmin>
     ),
   },
   {
@@ -111,10 +142,11 @@ function App() {
 
   return (
     <>
-      <div className="App">
-        <RouterProvider router={router} />
-      </div>
-    </>
+    <div className="App">
+      <RouterProvider router={router} />
+      {/* Link must be inside the Provider */}
+    </div>
+  </>
   );
 }
 

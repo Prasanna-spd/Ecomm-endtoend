@@ -2434,12 +2434,10 @@
   ],
   "users": [
     {
-      "id": "5ca1"
-    },
-    {
       "id": "c9e2",
       "email": "dashsaradaprasanna54@gmail.com",
       "password": "abcD@123",
+      "role": "user",
       "addresses": [
         {
           "name": "DEBI PRASHANA DASH",
@@ -2543,6 +2541,23 @@
     },
     {
       "id": "35b3",
+      "title": "Samsung Universe 9",
+      "description": "Samsung's new variant which goes beyond Galaxy to the Universe",
+      "price": 1249,
+      "discountPercentage": 15.46,
+      "rating": 4.09,
+      "stock": 36,
+      "brand": "Samsung",
+      "category": "smartphones",
+      "thumbnail": "https://cdn.dummyjson.com/product-images/3/thumbnail.jpg",
+      "images": [
+        "https://cdn.dummyjson.com/product-images/3/1.jpg"
+      ],
+      "quantity": 1,
+      "user": "c9e2"
+    },
+    {
+      "id": "da20",
       "title": "Samsung Universe 9",
       "description": "Samsung's new variant which goes beyond Galaxy to the Universe",
       "price": 1249,
