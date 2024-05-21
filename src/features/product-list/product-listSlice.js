@@ -95,6 +95,7 @@ export const productSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(fetchProductsByFiltersAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
         state.products = action.payload.products;
         state.totalItems = action.payload.totalItems;
       })
