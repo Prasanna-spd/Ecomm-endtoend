@@ -13,7 +13,7 @@ import {
 import { useState } from 'react';
 import { createOrderAsync } from '../../features/order/orderSlice';
 import { selectUserInfo } from '../../features/user/UserSlice';
-import { discountedPrice } from '../app/constants';
+import { discountedPrice } from '../../app/constants';
 
 function Checkout() {
   const dispatch = useDispatch();
