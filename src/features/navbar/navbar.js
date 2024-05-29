@@ -9,13 +9,15 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectItems } from '../cart/cartSlice';
 import { selectLoggedInUser } from '../auth/authSlice';
+import { selectUserInfo } from '../user/UserSlice';
+import ecommLogo from "../../assets/ecommerce.png"
 
 
 const navigation = [
-  { name: 'Dashboard', link: '#', user: true },
-  { name: 'Team', link: '#', user: true },
-  { name: 'Admin', link: '/admin', admin: true },
+  { name: 'Products', link: '/', user: true },
+  { name: 'Products', link: '/admin', admin: true },
   { name: 'Orders', link: '/admin/orders', admin: true },
+
 ];
 const userNavigation = [
   { name: 'My Profile', link: '/profile' },
@@ -28,12 +30,12 @@ function classNames(...classes) {
 }
 
 function NavBar({ children }) {
-  const user = useSelector(selectLoggedInUser);
   const items = useSelector(selectItems);
+  const userInfo = useSelector(selectUserInfo);
 
   return (
     <>
-      <div className="min-h-full">
+      {userInfo &&<div className="min-h-full">
         <Disclosure as="nav" className="bg-gray-800">
           {({ open }) => (
             <>
@@ -42,17 +44,17 @@ function NavBar({ children }) {
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
                       <Link to="/">
-                      <img
-                        className="h-8 w-8"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                        alt="Your Company"
-                      />
+                        <img
+                          className="h-8 w-8"
+                          src={ecommLogo}
+                          alt="Your Company"
+                        />
                       </Link>
                     </div>
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4">
-                      {navigation.map((item) =>
-                          item[user.role] ? (
+                        {navigation.map((item) =>
+                          item[userInfo.role] ? (
                             <Link
                               key={item.name}
                               to={item.link}
@@ -85,9 +87,11 @@ function NavBar({ children }) {
                           />
                         </button>
                       </Link>
-                      {items.length>0 && <span className="inline-flex items-center rounded-md mb-7 -ml-3 bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
-                        {items.length}
-                      </span>}
+                      {items.length > 0 && (
+                        <span className="inline-flex items-center rounded-md mb-7 -ml-3 bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                          {items.length}
+                        </span>
+                      )}
 
                       {/* Profile dropdown */}
                       <Menu as="div" className="relative ml-3">
@@ -96,7 +100,7 @@ function NavBar({ children }) {
                             <span className="sr-only">Open user menu</span>
                             <img
                               className="h-8 w-8 rounded-full"
-                              src={user.imageUrl}
+                              src={userInfo.imageUrl}
                               alt=""
                             />
                           </Menu.Button>
@@ -115,7 +119,7 @@ function NavBar({ children }) {
                               <Menu.Item key={item.name}>
                                 {({ active }) => (
                                   <Link
-                                    to = {item.link}
+                                    to={item.link}
                                     className={classNames(
                                       active ? 'bg-gray-100' : '',
                                       'block px-4 py-2 text-sm text-gray-700'
@@ -175,16 +179,17 @@ function NavBar({ children }) {
                     <div className="flex-shrink-0">
                       <img
                         className="h-10 w-10 rounded-full"
-                        src={user.imageUrl}
+                        src={userInfo.imageUrl}
                         alt=""
                       />
                     </div>
                     <div className="ml-3">
                       <div className="text-base font-medium leading-none text-white">
-                        {user.name}
+                        {/* this should come from userInfo */}
+                        {userInfo.name}
                       </div>
                       <div className="text-sm font-medium leading-none text-gray-400">
-                        {user.email}
+                        {userInfo.email}
                       </div>
                     </div>
                     <Link to="/cart">
@@ -198,9 +203,11 @@ function NavBar({ children }) {
                         />
                       </button>
                     </Link>
-                    {items.length>0 && <span className="inline-flex items-center rounded-md bg-red-50 mb-7 -ml-3 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
-                      {items.length}
-                    </span>}
+                    {items.length > 0 && (
+                      <span className="inline-flex items-center rounded-md bg-red-50 mb-7 -ml-3 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                        {items.length}
+                      </span>
+                    )}
                   </div>
                   <div className="mt-3 space-y-1 px-2">
                     {userNavigation.map((item) => (
@@ -232,7 +239,7 @@ function NavBar({ children }) {
             {children}
           </div>
         </main>
-      </div>
+      </div>}
     </>
   );
 }

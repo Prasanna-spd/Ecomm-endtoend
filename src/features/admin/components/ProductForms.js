@@ -11,6 +11,8 @@ import {
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
+import toast from 'react-hot-toast';
+
 
 function ProductForm() {
   const {
@@ -25,6 +27,7 @@ function ProductForm() {
   const dispatch = useDispatch();
   const params = useParams();
   const selectedProduct = useSelector(selectProductById);
+  
 
   useEffect(() => {
     if (params.id) {
@@ -82,9 +85,11 @@ function ProductForm() {
           product.id = params.id;
           product.rating = selectedProduct.rating || 0;
           dispatch(updateProductAsync(product));
+          toast.success('Product Updated')
           reset();
         } else {
           dispatch(createProductAsync(product));
+          toast.success('Product Created');
           reset();
           //TODO:  on product successfully added clear fields and show a message
         }
@@ -156,7 +161,7 @@ function ProductForm() {
                 >
                   <option value="">--choose brand--</option>
                   {brands.map((brand) => (
-                    <option value={brand.value}>{brand.label}</option>
+                    <option key={brand.value} value={brand.value}>{brand.label}</option>
                   ))}
                 </select>
               </div>
@@ -177,7 +182,7 @@ function ProductForm() {
                 >
                   <option value="">--choose category--</option>
                   {categories.map((category) => (
-                    <option value={category.value}>{category.label}</option>
+                    <option key={category.value} value={category.value}>{category.label}</option>
                   ))}
                 </select>
               </div>

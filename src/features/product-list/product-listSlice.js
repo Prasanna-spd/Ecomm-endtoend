@@ -26,17 +26,12 @@ export const fetchProductByIdAsync = createAsyncThunk(
 );
 
 
-export const fetchAllProductsAsync = createAsyncThunk(
-  "products/fetchAllProducts",
-  async () => {
-    const response = await fetchAllProducts();
-    return response.data;
-  }
-);
+
 export const fetchProductsByFiltersAsync = createAsyncThunk(
   'product/fetchProductsByFilters',
-  async ({ filter, sort, pagination }) => {
-    const response = await fetchProductsByFilters(filter, sort, pagination);
+  async ({ filter, sort, pagination,admin }) => {
+    const response = await fetchProductsByFilters(filter, sort, pagination,admin);
+    console.log(response,"frontend part product")
     return response.data;
   }
 );
@@ -84,13 +79,6 @@ export const productSlice = createSlice({
   }},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAllProductsAsync.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(fetchAllProductsAsync.fulfilled, (state, action) => {
-        state.status = "idle";
-        state.products = action.payload; // Use assignment instead of +=
-      })
       .addCase(fetchProductsByFiltersAsync.pending, (state) => {
         state.status = 'loading';
       })

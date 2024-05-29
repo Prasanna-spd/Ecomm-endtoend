@@ -73,7 +73,7 @@ function AdminOrders() {
           <div className="bg-white shadow-md rounded my-6">
             <table className="min-w-max w-full table-auto">
               <thead>
-                <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                <tr  className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                   <th
                     className="py-3 px-6 text-left cursor-pointer"
                     onClick={(e) =>
@@ -116,7 +116,7 @@ function AdminOrders() {
               </thead>
               <tbody className="text-gray-600 text-sm font-light">
                 {orders.map((order) => (
-                  <tr className="border-b border-gray-200 hover:bg-gray-100">
+                  <tr key={order.id} className="border-b border-gray-200 hover:bg-gray-100">
                     <td className="py-3 px-6 text-left whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="mr-2"></div>
@@ -124,12 +124,13 @@ function AdminOrders() {
                       </div>
                     </td>
                     <td className="py-3 px-6 text-left">
-                      {order.items.map((item) => (
-                        <div className="flex items-center">
+                      {order.items.map((item,index) => (
+                        <div key={index} className="flex items-center">
                           <div className="mr-2">
                             <img
                               className="w-6 h-6 rounded-full"
-                              src={item.thumbnail}
+                              src={item.product.thumbnail}
+                              alt={item.product.title}
                             />
                           </div>
                           <span>
