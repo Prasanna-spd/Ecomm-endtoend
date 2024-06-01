@@ -184,8 +184,8 @@ function App() {
     <>
       <div className="App">
       <Toaster/>
-      {/* {userChecked && ( <RouterProvider router={router} />)} */}
-       <RouterProvider router={router} />
+      {userChecked && ( <RouterProvider router={router} />)}
+       {/* <RouterProvider router={router} /> */}
        
         {/* Link must be inside the Provider */}
       </div>

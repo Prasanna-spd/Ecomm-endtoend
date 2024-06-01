@@ -1,66 +1,75 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
-import CheckoutForm from "./CheckoutForm";
-import "../../../src/Stripe.css";
-import { selectCurrentOrder } from "../../features/order/orderSlice";
 import { useSelector } from "react-redux";
+import { selectCurrentOrder } from "../../features/order/orderSlice";
+import "../../../src/Stripe.css";
 
-// Make sure to call loadStripe outside of a component’s render to avoid
-// recreating the Stripe object on every render.
-// This is your test publishable API key.
-const stripePromise = loadStripe(
-  "pk_test_51PKzPtSAoLjQrsQnvGjP24OPJCRWQdiuatYk3xEIHjgON0A4rv0e6Pu4FAvEy9soi0v3mtDSKFhQPz1D72oMj39C00mRDyyFp9"
-);
+const stripePromise = loadStripe('pk_test_51PKzPtSAoLjQrsQnvGjP24OPJCRWQdiuatYk3xEIHjgON0A4rv0e6Pu4FAvEy9soi0v3mtDSKFhQPz1D72oMj39C00mRDyyFp9');
 
-export default function StripeCheckout() {
-  const [clientSecret, setClientSecret] = useState("");
+const StripeCheckout = () => {
   const currentOrder = useSelector(selectCurrentOrder);
+  const [customerName, setCustomerName] = useState('');
+  const [customerAddress, setCustomerAddress] = useState('');
 
-  useEffect(() => {
-    // Create PaymentIntent as soon as the page loads
-    fetch("http://localhost:8080/create-payment-intent", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        totalAmount: currentOrder.totalAmount,
-        order_id: currentOrder.id,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("executed");
-        setClientSecret(data.clientSecret);
+  const makePayment = async () => {
+    try {
+      const headers = {
+        "Content-Type": "application/json"
+      };
+      const response = await fetch("https://ecomm-endtoend-backend-3xdi-4thevqhsq-prasannaspds-projects.vercel.app/create-checkout-session", {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify({
+          currentOrder,
+          customerName,
+          customerAddress
+        })
       });
-  }, [currentOrder.totalAmount, currentOrder.id]);
 
-  // Memoize the appearance object to avoid unnecessary re-renders
+      const session = await response.json();
 
-  const appearance = useMemo(
-    () => ({
-      theme: "stripe",
-    }),
-    []
-  );
+      console.log("response from payment",session)
+      const stripe = await stripePromise;
 
-  // Memoize the options object to avoid unnecessary re-renders
-  const options = useMemo(
-    () => ({
-      clientSecret,
-      appearance,
-    }),
-    [clientSecret, appearance]
-  );
+      const result = await stripe.redirectToCheckout({
+        sessionId: session.id
+      });
 
-  if (!clientSecret) {
-    return <div>Loading...</div>;
-  }
+      if (result.error) {
+        console.error(result.error.message);
+      }
+    } catch (error) {
+      console.error("Error making payment:", error);
+    }
+  };
 
   return (
     <div className="Stripe">
-      <Elements options={options} stripe={stripePromise}>
-        <CheckoutForm />
-      </Elements>
+      <div>
+        <label>
+          Customer Name:
+          <input
+            type="text"
+            value={customerName}
+            onChange={(e) => setCustomerName(e.target.value)}
+            required
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Customer Address:
+          <input
+            type="text"
+            value={customerAddress}
+            onChange={(e) => setCustomerAddress(e.target.value)}
+            required
+          />
+        </label>
+      </div>
+      <button onClick={makePayment}>Make Payment</button>
     </div>
   );
-}
+};
+
+export default StripeCheckout;
