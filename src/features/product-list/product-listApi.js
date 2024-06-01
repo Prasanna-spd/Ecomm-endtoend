@@ -2,7 +2,7 @@
 
 export function createProduct(product) {
   return new Promise(async (resolve) => {
-    const response = await fetch('https://ecomm-endtoend-backend-3xdi-4thevqhsq-prasannaspds-projects.vercel.app/products', {
+    const response = await fetch('http://localhost:8080/products', {
       method: 'POST',
       body: JSON.stringify(product),
       headers: { 'content-type': 'application/json' },
@@ -15,7 +15,7 @@ export function createProduct(product) {
 export function updateProduct(update) {
   return new Promise(async (resolve) => {
     const response = await fetch(
-      'https://ecomm-endtoend-backend-3xdi-4thevqhsq-prasannaspds-projects.vercel.app/products/' + update.id,
+      'http://localhost:8080/products/' + update.id,
       {
         method: 'PATCH',
         body: JSON.stringify(update),
@@ -31,7 +31,7 @@ export function updateProduct(update) {
 export function fetchProductById(id) {
   return new Promise(async (resolve) =>{
     //TODO: we will not hard-code server URL here
-    const response = await fetch('https://ecomm-endtoend-backend-3xdi-4thevqhsq-prasannaspds-projects.vercel.app/products/'+id) 
+    const response = await fetch('http://localhost:8080/products/'+id) 
     const data = await response.json()
     resolve({data})
   }
@@ -65,7 +65,7 @@ export function fetchProductsByFilters(filter,sort,pagination,admin) {
 
   return new Promise(async (resolve) =>{
     //TODO: we will not hard-code server URL here
-    const response = await fetch('https://ecomm-endtoend-backend-3xdi-4thevqhsq-prasannaspds-projects.vercel.app/products?'+queryString) 
+    const response = await fetch('http://localhost:8080/products?'+queryString) 
     const data = await response.json()
     console.log(data,"product-listapi response")
     const totalItems = data.totalItems
@@ -76,7 +76,7 @@ export function fetchProductsByFilters(filter,sort,pagination,admin) {
 
 export function fetchCategories() {
   return new Promise(async (resolve) =>{
-    const response = await fetch('https://ecomm-endtoend-backend-3xdi-4thevqhsq-prasannaspds-projects.vercel.app/categories') 
+    const response = await fetch('http://localhost:8080/categories') 
     const data = await response.json()
     resolve({data})
   }
@@ -85,7 +85,7 @@ export function fetchCategories() {
 
 export function fetchBrands() {
   return new Promise(async (resolve) =>{
-    const response = await fetch('https://ecomm-endtoend-backend-3xdi-4thevqhsq-prasannaspds-projects.vercel.app/brands') 
+    const response = await fetch('http://localhost:8080/brands') 
     const data = await response.json()
     resolve({data})
   }
