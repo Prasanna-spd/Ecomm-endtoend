@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { loginUser, createUser, signOut, checkAuth } from './authapi';
+import Cookies from 'js-cookie';
 import { updateUser } from '../user/userAPI';
 
 const initialState = {
@@ -25,6 +26,9 @@ export const loginUserAsync = createAsyncThunk(
     try {
       console.log("this is logininfo",loginInfo)
       const response = await loginUser(loginInfo);
+      console.log(response,"arehh wahh ho gaya na yeh request")
+      const token = response.data;
+      Cookies.set('token', token, { expires: 7 }); // The cookie will expire in 7 days
       return response.data;
     } catch (error) {
       console.log(error);

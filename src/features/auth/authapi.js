@@ -1,3 +1,8 @@
+import Cookies from 'js-cookie';
+
+const token = Cookies.get('token');
+
+
 
 export function createUser(userData) {
   return new Promise(async (resolve) => {
@@ -43,22 +48,27 @@ export function loginUser(loginInfo) {
         method: 'POST',
         body: JSON.stringify(loginInfo),
         headers: { 'content-type': 'application/json' },
+        credentials:"include"
       });
-      
-      if (response.ok) {
+      // 
+      if (response) {
         // Check for empty response before parsing JSON
+
         const text = await response.text();
         if (text) {
           const data = JSON.parse(text);
+
           resolve({ data });
         } else {
           resolve({ data: null }); // Handle empty response
         }
       } else {
         const error = await response.text();
+        console.log("this is the checkauth error ",error);
         reject(new Error(error));
       }
     } catch (error) {
+      console.log("this is the checkauth error ",error);
       reject(new Error(error.message || 'Network Error'));
     }
   });
@@ -69,15 +79,25 @@ export function loginUser(loginInfo) {
 export function checkAuth() {
   return new Promise(async (resolve, reject) => {
     try {
-      const response = await fetch('http://localhost:8080/auth/check');
+      const response = await fetch('http://localhost:8080/auth/check', {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+    Authorization: `Bearer ${token}`,
+  },
+    });
       if (response.ok) {
         const data = await response.json();
+        console.log("this s  the ccheckkkauth data",data);
         resolve({ data });
       } else {
         const error = await response.text();
+        console.log("this is the checkauth error ",error);
         reject(error);
       }
     } catch (error) {
+      console.log("this is the checkauth error ",error);
+
       reject( error );
     }
 

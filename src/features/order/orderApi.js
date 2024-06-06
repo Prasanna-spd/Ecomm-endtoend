@@ -1,10 +1,20 @@
+import Cookies from 'js-cookie';
+
+const token = Cookies.get('token');
+
+
+
 export function createOrder(order) {
   console.log(order,"from ordrapi")
   return new Promise(async (resolve) => {
     const response = await fetch('http://localhost:8080/orders/', {
       method: 'POST',
       body: JSON.stringify(order),
-      headers: { 'content-type': 'application/json' },
+      credentials:"include",
+      // headers: {  },
+      headers: {'content-type': 'application/json',
+    Authorization: `Bearer ${token}`,
+  },
     });
     const data = await response.json();
     // TODO: on server it will only return some info of user (not password)
@@ -16,9 +26,13 @@ export function createOrder(order) {
 export function updateOrder(order) {
   return new Promise(async (resolve) => {
     const response = await fetch('http://localhost:8080/orders/'+order.id, {
-      method: 'PATCH',
+      method: 'PUT',
       body: JSON.stringify(order),
-      headers: { 'content-type': 'application/json' },
+      credentials:"include",
+      // headers: {  },
+      headers: {'content-type': 'application/json',
+    Authorization: `Bearer ${token}`,
+  },
     });
     const data = await response.json();
     resolve({ data });

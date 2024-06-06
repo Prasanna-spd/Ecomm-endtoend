@@ -1,11 +1,14 @@
 // A mock function to mimic making an async request for data
+import Cookies from 'js-cookie';
 
+const token = Cookies.get('token');
 export function createProduct(product) {
   return new Promise(async (resolve) => {
     const response = await fetch('http://localhost:8080/products', {
       method: 'POST',
       body: JSON.stringify(product),
       headers: { 'content-type': 'application/json' },
+      credentials: 'include'
     });
     const data = await response.json();
     resolve({ data });
@@ -17,9 +20,12 @@ export function updateProduct(update) {
     const response = await fetch(
       'http://localhost:8080/products/' + update.id,
       {
-        method: 'PATCH',
+        method: 'PUT',
         body: JSON.stringify(update),
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json' ,
+        Authorization: `Bearer ${token}`
+        },
+        credentials: 'include'
       }
     );
     const data = await response.json();
@@ -31,7 +37,10 @@ export function updateProduct(update) {
 export function fetchProductById(id) {
   return new Promise(async (resolve) =>{
     //TODO: we will not hard-code server URL here
-    const response = await fetch('http://localhost:8080/products/'+id) 
+    const response = await fetch('http://localhost:8080/products/'+id,{
+      method: 'GET',
+        credentials: 'include'
+    }) 
     const data = await response.json()
     resolve({data})
   }
@@ -65,7 +74,10 @@ export function fetchProductsByFilters(filter,sort,pagination,admin) {
 
   return new Promise(async (resolve) =>{
     //TODO: we will not hard-code server URL here
-    const response = await fetch('http://localhost:8080/products?'+queryString) 
+    const response = await fetch('http://localhost:8080/products?'+queryString,{
+      method: 'GET',
+        credentials: 'include'
+    }) 
     const data = await response.json()
     console.log(data,"product-listapi response")
     const totalItems = data.totalItems
@@ -76,7 +88,12 @@ export function fetchProductsByFilters(filter,sort,pagination,admin) {
 
 export function fetchCategories() {
   return new Promise(async (resolve) =>{
-    const response = await fetch('http://localhost:8080/categories') 
+    const response = await fetch('http://localhost:8080/categories',
+      {
+        method: 'GET',
+        credentials: 'include'
+      }
+    ) 
     const data = await response.json()
     resolve({data})
   }
@@ -85,7 +102,10 @@ export function fetchCategories() {
 
 export function fetchBrands() {
   return new Promise(async (resolve) =>{
-    const response = await fetch('http://localhost:8080/brands') 
+    const response = await fetch('http://localhost:8080/brands',{
+      method: 'GET',
+        credentials: 'include'
+    }) 
     const data = await response.json()
     resolve({data})
   }
